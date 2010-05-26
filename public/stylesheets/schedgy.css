@@ -7,3 +7,17 @@
 body {
 	background-color: gray;
 }
+
+#schedgy-calendar {
+   width: 760px;
+   border: 1px solid #eee;
+}
+#schedgy-calendar tr {
+   vertical-align: top;
+}
+#schedgy-calendar td {
+   border: 1px solid #eee;
+}
+#schedgy-calendar .day .event {
+   float: right;
+}

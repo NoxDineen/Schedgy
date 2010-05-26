@@ -11,13 +11,146 @@
 		<script type="text/javascript" src="/javascripts/schedgy.js"></script>
 	<script>
 		$(document).ready(function() {
-			var calendar = new Calendar($('#schedgy-calendar'));
+			var schedgy = new Schedgy({
+				calendar: $('#schedgy-calendar'),
+				dateString: "May 1, 2010 11:13:00"
+			});
+			
+			$(".calendar-cell").droppable({
+				drop: function(event, ui) {
+					$element = ui.draggable;
+					alert($element.data('awesome-data'))
+				}
+			});
+		
+			$li = $('<li></li>');
+			$li.html('HELLO WORLD');
+			$li.data('awesome-data', 'greetings friends.');
+			$li.draggable({
+		    	helper: 'clone'
+		    });
+			$('#users').append($li);
+		    
 		});
 	</script>
 	</head>	
 	<body>
-		<div id="schedgy-calendar">
+
+		<table id="schedgy-calendar">
+		   <tr>
+		       <th>Sun</th>
+		       <th>Mon</th>
+		       <th>Tue</th>
+		       <th>Wed</th>
+		       <th>Thu</th>
+		       <th>Fri</th>
+		       <th>Sat</th>
+		   </tr>
+
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
 		
-		</div>
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
+		
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
+		
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
+		
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
+		
+		   <tr>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+	           </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		       <td class="day">
+		       </td>
+		   </tr>
+		</table>
+		
+		<ul id="users">
+		</ul>
 	</body>
 </html>
