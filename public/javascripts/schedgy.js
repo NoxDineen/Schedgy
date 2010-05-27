@@ -14,17 +14,37 @@
 var Schedgy = Class.extend({
 	init: function(params) {
 		this.$calendar = params.calendar;
+		this.controller = params.controller || '/schedgy';
 		
 		// initialize the calendar if the
 		// date string is set.
 		if (params.dateString) {
 			this.initCalendar(params.dateString);
 		}
+		
+		// Load the user list.
+		this.initUserList();
 	},
 	
 	initCalendar: function(dateString) {
 		var dateObject = new Date(dateString);
 		this.calendar = new Calendar(this.$calendar, dateObject);
+	},
+	
+	initUserList: function() {
+		var action = '/load_users'
+		
+		$.ajax({
+			url: this.controller + action,
+			dataType: 'json',
+			data: {},
+			type: 'POST',
+			success: this._userListCallback
+		});
+	},
+	
+	_userListCallback: function(data) {
+	
 	}
 });
 
