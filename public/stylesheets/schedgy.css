@@ -5,19 +5,77 @@
  */
 
 body {
-	background-color: gray;
+	background-color: #f4f4f4;
+	font: 12px/18px Arial, Helvetica, sans-serif;
 }
 
+/* layout */
+.clear {
+	clear: both;
+}
+#header {
+	background-color: #468bbd;
+	height: 90px;
+	padding: 5px 10px;
+}
+#main {
+	margin-right: 250px;
+	padding-top: 20px;
+	padding-right: 20px;
+}
+#sidebar {
+	position: absolute;
+	top: 120px;
+	right: 0;
+	width: 250px;
+	margin-right: 20px;
+}
+.shadow-top {
+	background: url('../images/shadow-top.png') no-repeat right;
+	float: left;
+	width: 20px;
+	height: 202px;
+}
+.shadow-bottom {
+	background: url('../images/shadow-bottom.png') no-repeat;
+	height: 15px;
+	clear: both;
+	margin-left: 20px;
+}
+.calendar-bg, .sidebar-bg {
+	background-color: #fff;
+	margin-left: 20px;
+	padding: 20px;
+}
+
+
+/* typography */
+h1 {
+	font-size: 42px;
+	line-height: normal;
+	color: #fff;
+	text-shadow: rgba(0, 0, 0, 0.35) 2px 2px 1px;
+	margin-top: 30px;
+}
+
+
+
 #schedgy-calendar {
-   width: 760px;
-   border: 1px solid #eee;
+	width: 99%;
+	margin-left: 12px;
 }
-#schedgy-calendar tr {
-   vertical-align: top;
-}
-#schedgy-calendar td {
-   border: 1px solid #eee;
-}
-#schedgy-calendar .day .event {
-   float: right;
-}
+	#schedgy-calendar tr {
+	   vertical-align: top;
+	}
+	#schedgy-calendar th {
+		background-color: #4299d4;
+		color: #fff;
+		text-align: center;
+		padding: 10px 0;
+	}
+	#schedgy-calendar td {
+	   border: 1px solid #eee;
+	}
+	#schedgy-calendar .day .event {
+	   float: right;
+	}

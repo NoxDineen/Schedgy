@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-darkness/jquery-ui.css" type="text/css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="stylesheets/reset.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/schedgy.css" type="text/css" />
 		<script type="text/javascript" src="javascripts/resig.js"></script>
 		<script type="text/javascript" src="javascripts/schedgy.js"></script>
@@ -36,122 +37,143 @@
 	</head>	
 	<body>
 
-		<table id="schedgy-calendar">
-		   <tr>
-		       <th>Sun</th>
-		       <th>Mon</th>
-		       <th>Tue</th>
-		       <th>Wed</th>
-		       <th>Thu</th>
-		       <th>Fri</th>
-		       <th>Sat</th>
-		   </tr>
+		<div id="header">
+			<h1>Schedgy</h1>
+		</div>
 
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
+		<div id="main">
+
+			<div class="shadow-top"></div>
+			<div class="calendar-bg">
+
+				<div id="schedgy-month">May 2010</div>
+				
+				<table id="schedgy-calendar" cellpadding="0" cellspacing="0">
+				   <tr>
+				       <th>Sun</th>
+				       <th>Mon</th>
+				       <th>Tue</th>
+				       <th>Wed</th>
+				       <th>Thu</th>
+				       <th>Fri</th>
+				       <th>Sat</th>
+				   </tr>
+
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
 		
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
 		
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
 		
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
 		
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
 		
-		   <tr>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-	           </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		       <td class="day">
-		       </td>
-		   </tr>
-		</table>
-		
-		<ul id="users">
-		</ul>
+				   <tr>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+			           </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				       <td class="day">
+				       </td>
+				   </tr>
+				</table>
+			</div>
+			<div class="shadow-bottom"></div>
+			
+		</div>
+		<div id="sidebar">
+			<div class="shadow-top"></div>
+			<div class="sidebar-bg">
+				<ul id="users">
+
+				</ul>
+			</div>
+			<div class="shadow-bottom"></div>
+		</div>
 		
 		<div id="schedgy-calendar">
 		</div>
