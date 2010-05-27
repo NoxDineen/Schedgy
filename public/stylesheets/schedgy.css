@@ -74,8 +74,35 @@ h1 {
 		padding: 10px 0;
 	}
 	#schedgy-calendar td {
-	   border: 1px solid #eee;
+		border: 1px solid #eee;
+		border-top: 0;
+		border-right: 0;
+		width: 14%;
+		height: 100px;
 	}
-	#schedgy-calendar .day .event {
-	   float: right;
-	}
+		#schedgy-calendar td .number {
+			background-color: #f2f2f2;
+			padding: 3px;
+		}
+		#schedgy-calendar td .event {
+		   float: right;
+		}
+		#schedgy-calendar td ul {
+			margin: 3px;
+		}
+			#schedgy-calendar td ul li {
+				background-color: #ddd;
+				border-radius: 8px;
+				-webkit-border-radius: 8px;
+				-moz-border-radius: 8px;
+				line-height: 16px;
+				padding: 0 8px;
+				height: 16px;
+				margin-bottom: 1px;
+			}
+			#schedgy-calendar td ul li img {
+				float: right;
+			}
+
+
+
