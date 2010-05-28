@@ -8,6 +8,12 @@ body {
 	background-color: #f4f4f4;
 	font: 12px/18px Arial, Helvetica, sans-serif;
 }
+a:link, a:visited, a:active {
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
 
 /* layout */
 .clear {
@@ -32,7 +38,9 @@ body {
 }
 .shadow-top {
 	background: url('../images/shadow-top.png') no-repeat right;
-	float: left;
+	position: absolute;
+	left: -20px;
+	top: 0;
 	width: 20px;
 	height: 202px;
 }
@@ -46,6 +54,7 @@ body {
 	background-color: #fff;
 	margin-left: 20px;
 	padding: 20px;
+	position: relative;
 }
 
 
@@ -57,9 +66,20 @@ h1 {
 	text-shadow: rgba(0, 0, 0, 0.35) 2px 2px 1px;
 	margin-top: 30px;
 }
+h3 {
+	font: bold 30px 'Reenie Beanie', Tahoma, Arial, sans-serif;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+}
 
 
-
+#schedgy-month {
+	font: bold 50px 'Reenie Beanie', Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	letter-spacing: -1px;
+	padding-bottom: 20px;
+}
 #schedgy-calendar {
 	width: 99%;
 	margin-left: 12px;
@@ -103,6 +123,36 @@ h1 {
 			#schedgy-calendar td ul li img {
 				float: right;
 			}
+
+form label {
+	display: block;
+	width: 120px;
+	padding-right: 5px;
+	float: left;
+	clear: both;
+	text-align: right;
+	line-height: 30px;
+}
+form input {
+	float: left;
+	margin: 3px;
+}
+
+.user-menu {
+	background: url('../images/menu-bg.png') no-repeat 0 center;
+	padding: 10px 10px 10px 15px;
+	width: 100px;
+}
+.user-menu div {
+	padding: 1px 0;
+}
+.user-menu a:link, .user-menu a:visited, .user-menu a:active {
+	color: #7f6c00;
+}
+.user-menu img {
+	float: left;
+	margin-right: 3px;
+}
 
 
 
