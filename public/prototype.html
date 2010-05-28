@@ -2,39 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	    <title>Mobius-JS</title>
+	    <title>Schedgy</title>
+		<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-darkness/jquery-ui.css" type="text/css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
 		<link rel="stylesheet" href="stylesheets/reset.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/schedgy.css" type="text/css" />
+		<script type="text/javascript" src="javascripts/json-template.js"></script>
+		<script type="text/javascript" src="javascripts/webtoolkit.md5.js"></script>
 		<script type="text/javascript" src="javascripts/resig.js"></script>
 		<script type="text/javascript" src="javascripts/schedgy.js"></script>
-
-		<link href='http://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
 
 	<script>
 		$(document).ready(function() {
 			var schedgy = new Schedgy({
 				calendar: $('#schedgy-calendar'),
-				dateString: "May 1, 2010 11:13:00"
+				dateString: "May 1, 2010",
+				userList: $('#users')
 			});
-			
-			$(".calendar-cell").droppable({
-				drop: function(event, ui) {
-					$element = ui.draggable;
-					alert($element.data('awesome-data'))
-				}
-			});
-		
-			$li = $('<li></li>');
-			$li.html('HELLO WORLD');
-			$li.data('awesome-data', 'greetings friends.');
-			$li.draggable({
-		    	helper: 'clone'
-		    });
-			$('#users').append($li);
-		    
 		});
 	</script>
 	</head>	
@@ -203,5 +189,18 @@
 				<img src="images/icons/cross.png" alt="Remove" /><a href="#">Remove</a>
 			</div>
 		</div>
+		
+		<!-- Templates -->
+		<script type="text" id="template-user-side">
+			<li>
+				<img src="http://www.gravatar.com/avatar/{md5}" width="24" height="24" />{first_name} {last_name}
+			</li>
+	 	</script>
+	
+		<script type="text" id="template-user-calendar">
+			<li>
+				{first_name} {last_name}
+			</li>
+	 	</script>
 	</body>
 </html>
