@@ -1,0 +1,15 @@
+<div id="schedgy-form">
+	
+<h2>Create a Schedgy Role</h2>
+
+<% if flash[:error] %>
+	<strong><%= flash[:error]%></strong>
+<% end %>
+
+<% form_for :role_type,  :url => { :action => "create_role_type" } do |f| %>
+	<%= f.error_messages %>
+	<%= label(:role_type, :name) %><%= f.text_field :name %>
+	<%= submit_tag 'Create' %>
+<% end %>
+
+</div>

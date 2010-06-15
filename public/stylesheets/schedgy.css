@@ -9,6 +9,7 @@ body {
 	font: 12px/18px Arial, Helvetica, sans-serif;
 }
 a:link, a:visited, a:active {
+	color: #00f;
 	text-decoration: underline;
 }
 a:hover {
@@ -100,6 +101,10 @@ h3 {
 		width: 14%;
 		height: 100px;
 	}
+	#schedgy-calendar td.day ul li {
+		position: relative;
+	}	
+	
 		#schedgy-calendar td .number {
 			background-color: #f2f2f2;
 			padding: 3px;
@@ -109,20 +114,27 @@ h3 {
 		}
 		#schedgy-calendar td ul {
 			margin: 3px;
+			height: 130px;
 		}
-			#schedgy-calendar td ul li {
-				background-color: #ddd;
-				border-radius: 8px;
-				-webkit-border-radius: 8px;
-				-moz-border-radius: 8px;
-				line-height: 16px;
-				padding: 0 8px;
-				height: 16px;
-				margin-bottom: 1px;
-			}
-			#schedgy-calendar td ul li img {
-				float: right;
-			}
+		#schedgy-calendar td ul li {
+			background-color: #ddd;
+			border-radius: 8px;
+			-webkit-border-radius: 8px;
+			-moz-border-radius: 8px;
+			line-height: 16px;
+			padding: 0 8px;
+			height: 16px;
+			margin-bottom: 1px;
+		}
+		#schedgy-calendar td ul li img {
+			float: right;
+		}
+		
+	#schedgy-calendar div.bottom {
+		text-align: right;
+		padding: 3px;
+		height: 25px;
+	}
 
 form label {
 	display: block;
@@ -142,6 +154,7 @@ form input {
 	background: url('../images/menu-bg.png') no-repeat 0 center;
 	padding: 10px 10px 10px 15px;
 	width: 100px;
+	z-index: 1;
 }
 .user-menu div {
 	padding: 1px 0;
@@ -150,9 +163,38 @@ form input {
 	color: #7f6c00;
 }
 .user-menu img {
-	float: left;
+	float: left !important;
 	margin-right: 3px;
 }
 
 
+#users li {
+    clear: both;
+}
+    #users li a {
+        text-decoration: none;
+        color: #000;
+        line-height: 30px;
+        display: block;
+        padding: 5px;
+        height: 30px;
+    }
+    #users li a:hover {
+        background-color: #f2f2f2;
+    }
+        #users li a img {
+            float: left;
+            margin-right: 5px;
+        }
+
+a.required-users-link:link, a.required-users-link:visited, a.required-users-link:active {
+	padding: 3px;
+}
+a.required-users-link:hover {
+	background-color: #f2f2f2;
+}
+.required-users-input {
+	width: 25px;
+	margin-left: 3px;
+}
 
