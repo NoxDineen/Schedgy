@@ -37,7 +37,7 @@ class SchedgyController < ApplicationController
     payload = []
     
     # Based on the timestamp in fetch all this month's days.
-    time = Time.at (params['time'].to_i)
+    time = Time.at params['time'].to_i
     days = Day.where('date like ?', time.strftime('%Y-%m') + '%')
     
     days.each do |day|
@@ -58,7 +58,7 @@ class SchedgyController < ApplicationController
     
     # Extract email and time from post parameters.
     email = params['email']
-    time = Time.at (params['time'].to_i)
+    time = Time.at params['time'].to_i
 
     # find or create a given day.
     day = Day.first(:conditions => ['date = ?', time.strftime('%Y-%m-%d')])
@@ -81,7 +81,7 @@ class SchedgyController < ApplicationController
     
     # Extract email and time from post parameters.
     email = params['email']
-    time = Time.at (params['time'].to_i)
+    time = Time.at params['time'].to_i
 
     # find or create a given day.
     day = Day.first(:conditions => ['date = ?', time.strftime('%Y-%m-%d')])
@@ -93,11 +93,26 @@ class SchedgyController < ApplicationController
       :required_user_count => 5,
     }) unless day
     
+    # Make sure we can in fact assign this user to the day.
     # If a user isn't assigned to this day assign them to it.
-    unless day.assigned_users.first(:conditions => ['email = ?', email])
-      day.assigned_users << user
-      day.save
-      payload[:message] = 'User assigned to day.'
+    unless day.assigned_users.first(:conditions => ['email = ?', email])   
+
+      if day.can_assign? user
+          day.assigned_users << user
+          day.save
+        
+          # Update the assignment object to indicate the type of 
+          # assignment that just took place, e.g., 'any'.
+        
+          assignment = Assignment.first(:conditions => ['day_id = ? AND user_id = ?', day.id, user.id])
+          assignment.assignment_type = day.assigned_as
+          assignment.save
+        
+          payload[:message] = 'User assigned to day.'
+      else
+        payload[:error] = day.error
+      end
+      
     else
       payload[:error] = 'User already assigned to this day.'
     end
@@ -149,7 +164,7 @@ class SchedgyController < ApplicationController
   def set_day_requirements_and_restrictions
     requirements = params['requirements'] ||= {}
     restrictions = params['restrictions'] ||= {}
-    time = Time.at (params['time'].to_i)
+    time = Time.at params['time'].to_i
     
     payload = {
       :restrictions => restrictions,
@@ -186,8 +201,10 @@ class SchedgyController < ApplicationController
     day.save
     restrictions.each do |k, v| # Add required role relationships to the day.
       role_type = RoleType.first(:conditions => ['name = ?', v])
-      day.restricted_role_types << role_type
-      day.save
+      if role_type
+        day.restricted_role_types << role_type
+        day.save
+      end
     end
     
     respond_to do |format|

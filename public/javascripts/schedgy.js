@@ -14,6 +14,12 @@
 var Schedgy = Class.extend({
 	userRoles: [],
 	
+	iconLookup: {
+		Developer: '<img src="images/icons/computer.png" alt="Developers" style="width: 10px;height: 10px;" />',
+		Marketing: '<img src="images/icons/briefcase.png" alt="Marketing" style="width: 10px;height: 10px;" />',
+		Support: '<img src="images/icons/cross.gif" alt="Support" style="width: 10px;height: 10px;" />'
+	},
+	
 	init: function(params) {
 		this.users = {};
 		this.$calendar = params.calendar;
@@ -41,8 +47,7 @@ var Schedgy = Class.extend({
 			success: function (data) {
 				for (var key in data) {
 					self.userRoles.push(data[key]);
-				}	
-				
+				}					
 				// Load the user list.
 				self.initUserList();
 			}
@@ -159,12 +164,21 @@ var Calendar = Class.extend({
 					alert(data.error);
 				} else {
 					// Load in each us
-					for (var key in data) {
-						
+					for (var key in data) {						
 						var dayData = data[key];
+						
 						var day = self.days[(new Date(dayData.day)).toString()]; // Lookup day based on date key.
 						
 						if (day) { // Make sure that this day exists in this month.
+							// Create a day restriction object and attach it to the day.
+							day.dayRequirements = new DayRequirements({
+								schedgy: self.schedgy,
+								day: day,
+								required_roles: dayData.required_roles,
+								restricted_roles: dayData.restricted_roles,
+								required_user_count: dayData.required_user_count
+							});
+							day.updateCounter(); // Update day widget with the new restrictions.
 							
 							// Now add the users to the day.
 							for (var userKey in dayData.assigned_users) {
@@ -212,10 +226,12 @@ var Day = Class.extend({
 		this.requiredUsers = 5;
 		this.currentUsers = 0;
 		
-		// Build the dialog for setting required users on this day.
 		this.dayRequirements = new DayRequirements({
 			schedgy: this.schedgy,
-			day: this
+			day: this,
+			required_roles: [],
+			restricted_roles: [],
+			required_user_count: 5
 		});
 		
 		// Build the DOM element for the day.
@@ -281,48 +297,19 @@ var Day = Class.extend({
 	
 	updateCounter: function() {
 		var self = this;
-		var $requiredUsers = $('<span></span>');
-		var $link = $('<a href="#" class="required-users-link">' + this.requiredUsers + '</a>&nbsp;&nbsp;');
+				
+		// Fetch the current restriction/requirement information from dayRequirements
+		// and display it.
 		
 		var _clickCallback = function(){
 			// Remove the click event.			
 			var $element = $(this).parent();
 			self.dayRequirements.show();
-			
-			
-			var $requiredUsersInput = $('<input class="required-users-input" type="text" value="' + self.requiredUsers + '" />');
-			$requiredUsersInput.keypress(function(event) {
-				var $this = $(this);
-				if (event.keyCode == 13) {
-					// Make sure that we can set this number of users.
-					var newRequiredUsers = parseInt($this.val());
-					if (newRequiredUsers >= self.currentUsers) {
-					
-						// Set the element back to its initial state.
-						$element.find('.required-users-input').remove();
-						self.requiredUsers = newRequiredUsers;
-						self.updateCounter();
-						
-					} else {
-						alert('Remove some users before setting this value.')
-					}
-				}
-				return true;
-			});
-			
-			$element.html('');
-			$element.append($requiredUsersInput);
-			$requiredUsersInput.focus();
-						
 			return false;
 		}
 		
-		// Make it so the number of required users can be updated.
-		$link.click(_clickCallback);
-		$requiredUsers.append($link);
-		
-		this.$counter.html(this.currentUsers + ' /');
-		this.$counter.append($requiredUsers);
+		this.$counter.html('');
+		this.$counter.append(this.dayRequirements.getUserWidget().click(_clickCallback));
 	},
 	
 	getUser: function(email) {
@@ -330,14 +317,16 @@ var Day = Class.extend({
 	},
 	
 	addUser: function($element) {
-		// Increment the current users.
-		this.currentUsers++;
-		this.updateCounter();
-		
+
 		var self = this;
 		
 		// Add to list of users on this day (if jquery call returns successfully)
 		var user = $element.data('class');
+		
+		// Update the day requirements object and the
+		// counter widget.
+		this.dayRequirements.addUser(user);
+		this.updateCounter()
 		
 		// We may have removed this element in another operation and user won't exist.
 		if (!user) {
@@ -433,13 +422,14 @@ var Day = Class.extend({
 		this.$list.append($user);
 	},
 	
-	removeUser: function(user, $user) {
-		// Decrement the current users.
-		this.currentUsers--;
-		this.updateCounter();
-		
+	removeUser: function(user, $user) {		
 		var self = this;
 		var action = '/remove_user_from_day'
+		
+		// Update the day requirements object and the
+		// counter widget.
+		this.dayRequirements.removeUser(user);
+		this.updateCounter()
 		
 		$.ajax({
 			url: this.schedgy.controller + action,
@@ -475,7 +465,7 @@ var User = Class.extend({
 	init: function(params) {
 		this.first_name = params.first_name;
 		this.last_name = params.last_name;
-		
+		this.role = params.roles[0] || 'any';
 		this.email = params.email;
 		this.md5 = MD5(this.email); // A Gravatar image key is just an MD5 encoded email.
 		this.$userList = params.$userList;
@@ -508,7 +498,17 @@ var DayRequirements = Class.extend({
 		var self = this;
 		this.schedgy = params.schedgy;
 		this.day = params.day;
+		this.required_roles = params.required_roles;
+		this.restricted_roles = params.restricted_roles;
+		this.required_user_count = params.required_user_count;
 		
+		// Initialize the boxes for storing user information
+		// for a given day.
+		this.users = {any: 0};
+		for (var key in this.schedgy.userRoles) {
+			this.users[this.schedgy.userRoles[key]] = 0;
+		}
+				
 		// Actually create the element and append it to the users list.
 		var template = new jsontemplate.Template($('#requirements-dialog').html());
 		
@@ -547,8 +547,21 @@ var DayRequirements = Class.extend({
 				return false;
 			});
 			
-			// Pre-populate the dialog with a sane set of required users.
-			for (var i=0;i < 5;i++) {
+			// Pre-populate the dialog with a sane set of required users.			
+			for (var key in this.required_roles) {
+				var name = this.required_roles[key].name;
+				var count = this.required_roles[key].count;
+				for (var i = 0; i < count; i++) {
+					self.addRequirement(self.$dialog.find('.requirement-selects'), name);
+				}
+			}
+			
+			for (var key in this.restricted_roles) {
+				var name = this.restricted_roles[key];
+				self.addRestriction(self.$dialog.find('.restriction-selects'), name);
+			}
+			
+			for (var i=0; i < this.required_user_count; i++) {
 				self.addRequirement(self.$dialog.find('.requirement-selects'));
 			}
 			
@@ -557,39 +570,140 @@ var DayRequirements = Class.extend({
 		}
 	},
 	
-	addRequirement: function($element) {
-		$select = $('<select></select>');
-		$option = $('<option name="type" value="any">Any Type</option>');
+	addRequirement: function($element, option) {
+		var self = this;
+		
+		// Default the option value to 'any' if none is specified.
+		option = option || 'any';
+		
+		// Add the default option to the selector..
+		var $select = $('<select></select>');
+		var $option = $('<option name="type" value="any">Any Type</option>');
 		$select.append($option);
 		
-		for (var key in this.schedgy.userRoles) {
+		// Output options for each user role, select the appropriate
+		// option if it is specifed.
+		for (var key in this.schedgy.userRoles) {			
 			$option = $('<option name="type"></option>');
 			$option.attr('value', this.schedgy.userRoles[key])
 			$option.html(this.schedgy.userRoles[key]);
+			
+			if (this.schedgy.userRoles[key] == option) {
+				$option.attr('selected', 'selected')
+			}
+			
 			$select.append($option);
 		}
+		
+		// Save reference to this element's initial type,
+		// used during validation.
+		$select.data('type', option);
+		$select.change(function() {
+			$select = $(this);
+			var message = self.validate($select.val());
+			if (message) {
+				alert(message);
+				$select.val($select.data('type'));
+			} else {
+				$select.data('type', $select.val());
+			}
+		});
+		
 		$element.append($select);
 	},
 	
-	addRestriction: function($element) {
-		$select = $('<select></select>');
+	// Don't a allow requirements to be dropped below the
+	// current number of users in a box.
+	validate: function(val) {
+		var message = false;
+		var sumRequirements = this.sumRequirements();
+		for (var key in this.users) {
+			
+			var sum = sumRequirements[key];
+			if (sumRequirements[key] == undefined) {
+				sum = 0;
+			}
+			
+			if (this.users[key] > sum) {
+				message = "You must remove users of the role '" + key + "' to perform this action.";
+			}
+		}
+
+		this.$dialog.find('.restriction-selects select').each(function() {
+			var restriction = $(this).val();
+			
+			if (restriction == val) {
+				message = "You must remove the restriction of the type '" + val + "' to perform this operation."
+			}
+		});
+		
+		if (message) {
+			return message;
+		}
+		
+		return false;
+	},
+	
+	addRestriction: function($element, option) {
+		var self = this;
+		var $select = $('<select><option name="type" value="[Choose One]">[Choose One]</option></select>');
+		$select.data('type', $select.val());
 		
 		for (var key in this.schedgy.userRoles) {
-			$option = $('<option name="type"></option>');
+			var $option = $('<option name="type"></option>');
 			$option.attr('value', this.schedgy.userRoles[key])
 			$option.html(this.schedgy.userRoles[key]);
+			
+			if (option == this.schedgy.userRoles[key]) {
+				$option.attr('selected', 'selected')
+			}
+			
 			$select.append($option);
 		}
+		
+		// Don't let a user set a restriction for a user type already assigned
+		// to this day.
+		$select.change(function() {
+			var $select = $(this);
+			if (self.users[$select.val()] > 0) {
+				alert("Cannot add restriction of this type, remove users of type '" + $select.val() + "'");
+				$select.val($select.data('type'));
+			} else {
+				$select.data('type', $select.val());
+			}
+		});
 		
 		$element.append($select);
 	},
 	
 	removeRequirement: function($element) {
-		$selects = $element.find('select:last').remove();
+		var $select = $element.find('select:last');
+		
+		// Don't allow requirements to be dropped below the current
+		// number of users in a given box.
+		var sumRequirements = this.sumRequirements();
+		if (this.users[$select.data('type')] > (sumRequirements[$select.data('type')] - 1)) {
+			alert("You must remove users of the role '" + $select.data('type') + "' before performing this action.");
+		} else {
+			$select.remove();
+		}
 	},
 
 	removeRestriction: function($element) {
 		$selects = $element.find('select:last').remove();
+	},
+	
+	sumRequirements: function() {
+		var sumRequirements = {}; // Used to sum the number of users needed for each requirement type.
+		this.$dialog.find('.requirement-selects select option:selected').each(function() {
+			$select = $(this);
+			if (sumRequirements[$select.val()] == undefined) {
+				sumRequirements[$select.val()] = 1;
+			} else {
+				sumRequirements[$select.val()] += 1;
+			}
+		});
+		return sumRequirements;
 	},
 	
 	saveRequirements: function($element) {
@@ -601,15 +715,7 @@ var DayRequirements = Class.extend({
 		var action = '/set_day_requirements_and_restrictions'
 		
 		// Grab required user settings from the pop-up.
-		var sumRequirements = {}; // Used to sum the number of users needed for each requirement type.
-		this.$dialog.find('.requirement-selects select').each(function() {
-			$select = $(this);
-			if (sumRequirements[$select.val()] == undefined) {
-				sumRequirements[$select.val()] = 1;
-			} else {
-				sumRequirements[$select.val()] += 1;
-			}
-		});
+		var sumRequirements = this.sumRequirements();
 		
 		// Copy the values into the payload array.
 		for (var key in sumRequirements) {
@@ -630,7 +736,7 @@ var DayRequirements = Class.extend({
 			data: self.payload,
 			type: 'POST',
 			success: function (data) {
-				
+				self.hide();
 			}
 		});
 	},
@@ -641,5 +747,56 @@ var DayRequirements = Class.extend({
 	
 	hide: function() {
 		this.$dialog.dialog('close');
+		this.day.updateCounter();
+	},
+	
+	addUser: function(user) {
+		var role = user.role || 'any';
+		var requirements = this.sumRequirements();
+		if (this.users[role] == requirements[role] || requirements[role] == undefined) {
+			role = 'any';
+		}
+		this.users[role]++;
+	},
+	
+	removeUser: function(user) {
+		var role = user.role || 'any';
+		var requirements = this.sumRequirements();
+		if (this.users[role] == 0 || requirements[role] == undefined) {
+			role = 'any';
+		}
+		this.users[role]--;
+	},
+	
+	getUserWidget: function() {
+		var imageHTML = '<img src="images/icons/smile.png" alt="Anyone" style="width: 10px;height: 10px;" />';
+		
+		var $userWidget = $('<span></span>');
+		var requirements = this.sumRequirements();
+		
+		var empty = true;
+		for (var key in this.users) {
+			if (requirements[key]) {
+				
+				empty = false;
+				
+				$a = $('<a href="#" style="text-decoration: none;font-size: 9px;"></a>');				
+				var imageHTMLTemp = imageHTML;
+				if (this.schedgy.iconLookup[key]) {
+					imageHTMLTemp = this.schedgy.iconLookup[key];
+				}
+				
+				$a.html(imageHTMLTemp + this.users[key] + '/' + requirements[key]);
+				$userWidget.append($a);
+			}
+		}
+		
+		if (empty) {
+			$a = $('<a href="#" style="text-decoration: none;font-size: 9px;"></a>');
+			$a.html('Click Me.');
+			$userWidget.append($a);
+		}
+		
+		return $userWidget;
 	}
 });
