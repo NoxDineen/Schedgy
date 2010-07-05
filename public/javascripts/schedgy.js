@@ -769,7 +769,7 @@ var DayRequirements = Class.extend({
 	},
 	
 	getUserWidget: function() {
-		var imageHTML = '<img src="images/icons/smile.png" alt="Anyone" style="width: 10px;height: 10px;" />';
+		var imageHTML = '<img src="images/icons/smile.png" alt="Anyone" style="width: 12px;height: 12px;" />';
 		
 		var $userWidget = $('<span></span>');
 		var requirements = this.sumRequirements();
@@ -780,7 +780,7 @@ var DayRequirements = Class.extend({
 				
 				empty = false;
 				
-				$a = $('<a href="#" style="text-decoration: none;font-size: 9px;"></a>');				
+				$a = $('<a href="#" style="text-decoration: none;font-size: 12px;"></a>');				
 				var imageHTMLTemp = imageHTML;
 				if (this.schedgy.iconLookup[key]) {
 					imageHTMLTemp = this.schedgy.iconLookup[key];
