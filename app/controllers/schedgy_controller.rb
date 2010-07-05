@@ -137,6 +137,23 @@ class SchedgyController < ApplicationController
     
   end
   
+  # Create a new user based on the params passed in from a form.
+  # @param parameters from form.
+  def create_user
+    # Reset flash messages.
+    flash[:error] = false
+    @user = nil
+    @user_levels = {
+      'Regular User' => '1',
+      'Admin User' => '2'
+    }
+    
+    # If the role_type parameter is set create a new role.
+    if params['user']
+      @user = User.create(params['user'])
+    end
+  end
+  
   # Assigns a user to a role.
   # @param params['role_type']['name']
   # @param params['user']['email']
