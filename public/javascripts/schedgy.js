@@ -27,6 +27,10 @@ var Schedgy = Class.extend({
 		
 		// Load the list of user roles from the server.
 		this.loadRoles();
+		
+		// Load the tags that can be applied to a given
+		// user on a given day.
+		this.loadTags();
 	},
 	
 	loadRoles: function() {
@@ -48,9 +52,24 @@ var Schedgy = Class.extend({
 		});
 	},
 	
+	loadTags: function() {
+		var self = this;
+		var action = '/list_tags'; // The action for the rails controller.
+		
+		$.ajax({
+			url: this.controller + action,
+			dataType: 'json',
+			data: {},
+			type: 'POST',
+			success: function (data) {
+				self.tags = data;
+			}
+		});		
+	},
+	
 	initUserList: function() {
 		var self = this;
-		var action = '/list_users' // The action for the rails controller.
+		var action = '/list_users'; // The action for the rails controller.
 		
 		$.ajax({
 			url: this.controller + action,
@@ -310,6 +329,29 @@ var Day = Class.extend({
 		return this.users[email];
 	},
 	
+	addTagToUser: function(user, tag) {
+		var self = this;
+		var action = '/add_tag_to_user';
+		
+		$.ajax({
+			url: self.schedgy.controller + action,
+			dataType: 'json',
+			data: {
+				time: (new Date(self.calendar.dateObject.getFullYear(), self.calendar.dateObject.getMonth(), self.dayOfMonth)).getTime() / 1000, // Ruby takes seconds.
+				email: user.email,
+				tag: tag
+			},
+			type: 'POST',
+			success: function (data) {
+				if (data.error) {
+					alert(data.error);
+				} else {
+					// Currently we do nothing.
+				}
+			}
+		});	
+	},
+	
 	addUser: function($element) {
 
 		var self = this;
@@ -347,9 +389,18 @@ var Day = Class.extend({
 			var user = $user.data('class');
 			
 			// Create user pop-up.
-			var template = new jsontemplate.Template($('#user-menu').html());
-			var $userMenu = $(template.expand({}));
+			var $userMenu = $('<div class="user-menu" />');
 			$userMenu.css({position: 'absolute', top: '-32px', left: '113px'});
+			var $div = $('<div />');
+			
+			// Menu for tagging a user on a given day is built from the
+			// taging options returned by the server.
+			$.each(self.schedgy.tags, function() {
+				$div.append('<div><img src="images/tags/' + this + '.png" class="user-menu-' + this + '" alt="' + this + '" /><a href="#"  class="user-menu-' + this + '">' + this + '</a></div>');
+			});
+			
+			$div.append('<img src="images/icons/cross.png" class="user-menu-remove" alt="Remove" /><a href="#" class="user-menu-remove">Remove</a>');
+			$userMenu.append($div);
 			$user.append($userMenu);
 			
 			// Add the remove event.
@@ -358,37 +409,37 @@ var Day = Class.extend({
 				return false;
 			});
 			
-			// Add the billing event.
-			// Add the remove event.
-			$userMenu.find('.user-menu-billing').click(function(event) {
-				// Close the menu if it's open.
-				$('.user-menu').remove();
-				var user = $user.data('class');
+			// Attach click events for adding and removing tags from a user.
+			$.each(self.schedgy.tags, function() {
 				
-				$imagesOnUser = $user.find('img[alt=Billing]');
-				if (!$imagesOnUser.length) {
-					$user.prepend('<img src="images/icons/money-bag.png" alt="Billing" />');
-				} else {
-					$user.find('img[alt=Billing]').remove();
-				}
+				var tag = this;
+				var $link = $userMenu.find('a.user-menu-' + tag);
+
+				$link.data('class', user); // Attach the user object to the link for easy lookup.
+				$link.data('tag', '' + tag);
+
+				$link.click(function(event) {
+					
+					var user = $(this).data('class');
+					var tag = $(this).data('tag');
+					
+					// Close the menu if it's open.
+					$('.user-menu').remove();
+					
+					$imagesOnUser = $user.find('img[alt=' + tag + ']');
+					if (!$imagesOnUser.length) {
+						$user.prepend('<img src="images/tags/' + tag + '.png" alt="' + tag +'" />');
+						
+						// Make an AJAX call out to add the tag.
+						self.addTagToUser(user, tag);
+						
+					} else {
+						$user.find('img[alt=' + tag + ']').remove();
+					}
 				
-				return false;
-			});
-			
-			// Add the remove event.
-			$userMenu.find('.user-menu-captain').click(function(event) {
-				// Close the menu if it's open.
-				$('.user-menu').remove();
-				var user = $user.data('class');
+					return false;
+				});
 				
-				$imagesOnUser = $user.find('img[alt=Captain]');
-				if (!$imagesOnUser.length) {
-					$user.prepend('<img src="images/icons/star.png" alt="Captain" />');
-				} else {
-					$user.find('img[alt=Captain]').remove();
-				}
-				
-				return false;
 			});
 			
 			$userMenu.click(function(event) {

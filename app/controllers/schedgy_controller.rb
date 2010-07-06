@@ -12,12 +12,30 @@ class SchedgyController < ApplicationController
 
   # Returns a list of all the users within the schedy system.
   # 
-  # return void renders a JSON payload to the client.
+  # return void returns a JSON payload to the client.
   def list_users
     payload = []
     users = User.all
     users.each do |user|
       payload << user.get_payload
+    end
+    
+    respond_to do |format|
+      format.html {render :layout => false, :json => payload}
+      format.json {render :layout => false, :json => payload}
+    end
+  end
+  
+  # Returns a list of all the tags that can currently be applied
+  # to a user.
+  #
+  # return void returns a JSON payload to the client.
+  def list_tags
+    payload = []
+    
+    tags = Tag.all
+    tags.each do |tag|
+      payload << tag.text
     end
     
     respond_to do |format|
@@ -86,6 +104,37 @@ class SchedgyController < ApplicationController
       format.json {render :layout => false, :json => payload}
     end
     
+  end
+  
+  # Assigns a tag to a user on a specific day.
+  def add_tag_to_user
+    payload = {}
+    
+    if session[:level] == 2 # Make sure this is an admin user.      
+      # Extract email and time from post parameters.
+      email = params['email']
+      time = Time.at params['time'].to_i
+
+      # find or create a given day.
+      day = Day.first(:conditions => ['date = ?', time.strftime('%Y-%m-%d')])
+      user = User.first(:conditions => ['email = ?', email])
+      tag = Tag.first(:conditions => ['text = ?', params['tag']])
+      
+      day.assignments.each do |assignment|
+        if assignment.user_id == user.id
+          assignment.applied_tags << tag
+        end
+      end
+      
+    else
+      payload[:error] = I18n.t(:permission_error)
+    end
+    
+    
+    respond_to do |format|
+      format.html {render :layout => false, :json => payload}
+      format.json {render :layout => false, :json => payload}
+    end
   end
   
   # Given a timestamp and an email adds a user to a given day of the month.
@@ -159,6 +208,28 @@ class SchedgyController < ApplicationController
       if params['role_type']
         @role_type = RoleType.create(params['role_type'])
       end
+    else
+      flash[:error] = I18n.t(:permission_error)
+    end
+    
+  end
+  
+  # Create a new tag that can be assigned when adding a user
+  # to a day.
+  # @param params form parameters for creating a new tag.
+  def create_tag
+    
+    if session[:level] == 2 # Make sure this is an admin user.
+          
+      # Reset flash messages.
+      flash[:error] = false
+      @tag = nil
+    
+      # If the role_type parameter is set create a new role.
+      if params['tag']
+        @tag = Tag.create(params['tag'])
+      end
+      
     else
       flash[:error] = I18n.t(:permission_error)
     end
