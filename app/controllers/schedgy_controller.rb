@@ -38,7 +38,7 @@ class SchedgyController < ApplicationController
     
     # Based on the timestamp in fetch all this month's days.
     time = Time.at params['time'].to_i
-    days = Day.where('date like ?', time.strftime('%Y-%m') + '%')
+    days = Day.find(:all, :conditions => ['date like ?', time.strftime('%Y-%m') + '%'])
     
     days.each do |day|
       payload << day.get_payload
@@ -191,6 +191,11 @@ class SchedgyController < ApplicationController
     
     # find or create a given day.
     day = Day.first(:conditions => ['date = ?', time.strftime('%Y-%m-%d')])
+    
+    # Make sure the day exists.
+    day = Day.create({
+      :date => time
+    }) unless day
     
     # Remove any existing restrictions or requirements.
     day.required_role_types.clear

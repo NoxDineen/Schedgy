@@ -1,0 +1,19 @@
+<div id="schedgy-form">
+	
+<h2>Create a Schedgy User</h2>
+
+<% if flash[:error] %>
+	<strong><%= flash[:error]%></strong>
+<% end %>
+
+<% form_for :user,  :url => { :action => "create_user" } do |f| %>
+	<%= f.error_messages %><br />
+	<%= label(:user, :first_name) %><%= f.text_field :first_name %><br />
+	<%= label(:user, :last_name) %><%= f.text_field :last_name %><br />
+	<%= label(:user, :email) %><%= f.text_field :email %><br />
+	<%= label(:user, :password) %><%= f.password_field :password %><br />
+	<%= label(:user, :level) %><%= select("user", "level", @user_levels, {:include_blank => false}) %><br />
+	<%= submit_tag 'Create' %>
+<% end %>
+
+</div>
