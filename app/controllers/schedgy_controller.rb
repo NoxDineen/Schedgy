@@ -6,6 +6,9 @@ class SchedgyController < ApplicationController
 
   def index
   end
+  
+  def admin
+  end
 
   # Returns a list of all the users within the schedy system.
   # 
