@@ -13,13 +13,7 @@
  */
 var Schedgy = Class.extend({
 	userRoles: [],
-	
-	iconLookup: {
-		Developer: '<img src="images/icons/computer.png" alt="Developers" style="width: 10px;height: 10px;" />',
-		Marketing: '<img src="images/icons/briefcase.png" alt="Marketing" style="width: 10px;height: 10px;" />',
-		Support: '<img src="images/icons/cross.gif" alt="Support" style="width: 10px;height: 10px;" />'
-	},
-	
+		
 	init: function(params) {
 		this.users = {};
 		this.$calendar = params.calendar;
@@ -773,9 +767,7 @@ var DayRequirements = Class.extend({
 		this.users[role]--;
 	},
 	
-	getUserWidget: function() {
-		var imageHTML = '<img src="images/icons/smile.png" alt="Anyone" style="width: 12px;height: 12px;" />';
-		
+	getUserWidget: function() {		
 		var $userWidget = $('<span></span>');
 		var requirements = this.sumRequirements();
 		
@@ -785,13 +777,10 @@ var DayRequirements = Class.extend({
 				
 				empty = false;
 				
-				$a = $('<a href="#" style="text-decoration: none;font-size: 12px;"></a>');				
-				var imageHTMLTemp = imageHTML;
-				if (this.schedgy.iconLookup[key]) {
-					imageHTMLTemp = this.schedgy.iconLookup[key];
-				}
+				$a = $('<a href="#" style="text-decoration: none;font-size: 12px;"></a>');
+				var imageHTML = '<img src="images/user_types/' + key + '.png" alt="Anyone" style="width: 12px;height: 12px;" />';
 				
-				$a.html(imageHTMLTemp + this.users[key] + '/' + requirements[key]);
+				$a.html(imageHTML + this.users[key] + '/' + requirements[key]);
 				$userWidget.append($a);
 			}
 		}
