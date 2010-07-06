@@ -736,6 +736,11 @@ var DayRequirements = Class.extend({
 			data: self.payload,
 			type: 'POST',
 			success: function (data) {
+				
+				if (data.error) {
+					alert(data.error);
+				}
+				
 				self.hide();
 			}
 		});

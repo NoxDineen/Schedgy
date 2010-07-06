@@ -1,0 +1,20 @@
+<div id="schedgy-form">
+	
+<h2>Login</h2>
+
+<% if flash[:error] %>
+	<strong><%= flash[:error]%></strong>
+<% end %>
+
+<% if flash[:message] %>
+	<strong><%= flash[:message]%></strong>
+<% end %>
+
+<% form_for :user,  :url => { :action => "login" } do |f| %>
+	<%= f.error_messages %><br />
+	<%= label(:user, :email) %><%= f.text_field :email %><br />
+	<%= label(:user, :password) %><%= f.password_field :password %><br />
+	<%= submit_tag 'Login' %>
+<% end %>
+
+</div>
