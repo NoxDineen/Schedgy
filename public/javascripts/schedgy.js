@@ -29,7 +29,7 @@ var Schedgy = Class.extend({
 		this.dateObject = params.dateObject || new Date();
 		this.dateObject = new Date(this.dateObject.getFullYear(), this.dateObject.getMonth(), 1);
 		
-		this.controller = params.controller || '/schedgy';
+		this.controller = params.controller || 'schedgy';
 		
 		// Load the list of user roles from the server.
 		this.loadRoles();
