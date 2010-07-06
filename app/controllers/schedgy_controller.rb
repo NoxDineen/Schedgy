@@ -4,6 +4,9 @@ class SchedgyController < ApplicationController
   # Helper functions for Schedgy.
   include ApplicationHelper
 
+  def index
+  end
+
   # Returns a list of all the users within the schedy system.
   # 
   # return void renders a JSON payload to the client.
