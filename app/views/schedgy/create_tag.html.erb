@@ -1,0 +1,17 @@
+<%= link_to "Admin Options", :controller => "schedgy", :action => "admin" %>
+
+<div id="schedgy-form">
+	
+<h2>Create a Tag</h2>
+
+<% if flash[:error] %>
+	<strong><%= flash[:error]%></strong>
+<% end %>
+
+<% form_for :tag,  :url => { :action => "create_tag" } do |f| %>
+	<%= f.error_messages %>
+	<%= label(:tag, :text) %><%= f.text_field :text %>
+	<%= submit_tag 'Create' %>
+<% end %>
+
+</div>
