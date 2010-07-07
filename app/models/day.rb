@@ -35,9 +35,20 @@ class Day < ActiveRecord::Base
       }
       payload[:required_roles] << tmp_struct
     end
-    
+
+    user_lookup = {}
     self.assigned_users.each do |user|
-      payload[:assigned_users] << user.get_payload
+      user_lookup[user.id] = user.get_payload
+      user_lookup[user.id][:tags] = []
+      payload[:assigned_users] << user_lookup[user.id]
+    end
+        
+    self.assignments.each do |assignment|
+      assignment.applied_tags.each do |tag|
+        puts 'user id ' + assignment.user_id.to_s + ' tag ' + tag.text
+        user_lookup[assignment.user_id][:tags] << tag.text
+        user_lookup[assignment.user_id][:tags] = user_lookup[assignment.user_id][:tags].to_set.to_a # Make sure elements remain unique.
+      end
     end
     
     payload

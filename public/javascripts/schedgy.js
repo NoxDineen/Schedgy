@@ -198,9 +198,9 @@ var Calendar = Class.extend({
 								
 								var userPayload = dayData.assigned_users[userKey];
 								var user = self.schedgy.getUser(userPayload.email);
-							
+								
 								if (day.currentUsers < day.requiredUsers) {
-									day.addUser(user.$user);
+									day.addUser(user.$user, dayData.assigned_users[userKey].tags);
 								} else {
 									alert('There are already enough users on this day.');
 								}
@@ -352,12 +352,44 @@ var Day = Class.extend({
 		});	
 	},
 	
-	addUser: function($element) {
-
+	removeTagFromUser: function(user, tag) {
+		var self = this;
+		var action = '/remove_tag_from_user';
+		
+		$.ajax({
+			url: self.schedgy.controller + action,
+			dataType: 'json',
+			data: {
+				time: (new Date(self.calendar.dateObject.getFullYear(), self.calendar.dateObject.getMonth(), self.dayOfMonth)).getTime() / 1000, // Ruby takes seconds.
+				email: user.email,
+				tag: tag
+			},
+			type: 'POST',
+			success: function (data) {
+				if (data.error) {
+					alert(data.error);
+				} else {
+					// Currently we do nothing.
+				}
+			}
+		});	
+	},
+	
+	addTagsToUserElement: function($user, tags) {
+		if (tags) {
+			for (var i = 0;i < tags.length;i++) {
+				var tag = tags[i];
+				$user.prepend('<img src="images/tags/' + tag + '.png" alt="' + tag +'" />');
+			}
+		}
+	},
+	
+	addUser: function($element, tags) {
+		
 		var self = this;
 		
 		// Add to list of users on this day (if jquery call returns successfully)
-		var user = $element.data('class');
+		var user = $element.data('class');		
 		
 		// Update the day requirements object and the
 		// counter widget.
@@ -369,7 +401,6 @@ var Day = Class.extend({
 			return;
 		}
 		
-		
 		this.users[user.email] = user;
 		
 		var template = new jsontemplate.Template($('#template-user-calendar').html());
@@ -379,6 +410,9 @@ var Day = Class.extend({
 			last_name_first_initial: user.last_name.charAt(0)
 		}));	
 		$user.data('class', user);
+		
+		// Add tags to the user element.
+		this.addTagsToUserElement($user, tags);
 		
 		// Allow a user to be removed.
 		$user.click(function (event) {
@@ -434,6 +468,9 @@ var Day = Class.extend({
 						self.addTagToUser(user, tag);
 						
 					} else {
+						// Make an AJAX call to remove a tag.
+						self.removeTagFromUser(user, tag);
+						
 						$user.find('img[alt=' + tag + ']').remove();
 					}
 				
@@ -831,7 +868,7 @@ var DayRequirements = Class.extend({
 				$a = $('<a href="#" style="text-decoration: none;font-size: 12px;"></a>');
 				var imageHTML = '<img src="images/user_types/' + key + '.png" alt="Anyone" style="width: 12px;height: 12px;" />';
 				
-				$a.html(imageHTML + this.users[key] + '/' + requirements[key]);
+				$a.html(imageHTML + this.users[key] + '/' + requirements[key] + '&nbsp;');
 				$userWidget.append($a);
 			}
 		}

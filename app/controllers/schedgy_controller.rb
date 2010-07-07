@@ -137,6 +137,38 @@ class SchedgyController < ApplicationController
     end
   end
   
+  # Remove a tag from a user on a specific day.
+  def remove_tag_from_user
+    payload = {}
+    
+    if session[:level] == 2 # Make sure this is an admin user.      
+      # Extract email and time from post parameters.
+      email = params['email']
+      time = Time.at params['time'].to_i
+
+      # find or create a given day.
+      day = Day.first(:conditions => ['date = ?', time.strftime('%Y-%m-%d')])
+      user = User.first(:conditions => ['email = ?', email])
+      
+      day.assignments.each do |assignment|
+        assignment.applied_tags.each do |tag|
+          if assignment.user_id == user.id && tag.text == params['tag']
+            assignment.applied_tags.delete(tag)
+          end
+        end
+      end
+      
+    else
+      payload[:error] = I18n.t(:permission_error)
+    end
+    
+    
+    respond_to do |format|
+      format.html {render :layout => false, :json => payload}
+      format.json {render :layout => false, :json => payload}
+    end
+  end
+  
   # Given a timestamp and an email adds a user to a given day of the month.
   # @param params['email'] the email address of the user to assign.
   # @param params['time'] the timestamp used to lookup the day.
