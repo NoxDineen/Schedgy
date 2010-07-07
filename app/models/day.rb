@@ -1,6 +1,8 @@
 class Day < ActiveRecord::Base
+  # Accessors for instance variables.
   attr_accessor :error, :assigned_as
   
+  # Relationships.
   has_many :assignments
   has_many :assigned_users, :through => :assignments, :source => :user
 
@@ -13,7 +15,10 @@ class Day < ActiveRecord::Base
   has_many :required_roles
   has_many :required_role_types, :through => :required_roles, :source => :role_type
   
-  # override default to_json
+  
+  # 
+  # Create a JSON payload from the Day model and its
+  # relationships.
   def get_payload
     payload = {
       :day => self.date.strftime('%b %d, %Y'),
@@ -23,10 +28,12 @@ class Day < ActiveRecord::Base
       :required_user_count => self.required_user_count
     }
     
+    # User types that cannot be assigned to this day.
     self.restricted_role_types.each do |role_type|
       payload[:restricted_roles] << role_type.name
     end
     
+    # Roles that are required on the day.
     self.required_roles.each do |required_role|
       role_type = required_role.role_type
       tmp_struct = {
@@ -36,6 +43,7 @@ class Day < ActiveRecord::Base
       payload[:required_roles] << tmp_struct
     end
 
+    # Users attached to this day.
     user_lookup = {}
     self.assigned_users.each do |user|
       user_lookup[user.id] = user.get_payload
@@ -43,6 +51,7 @@ class Day < ActiveRecord::Base
       payload[:assigned_users] << user_lookup[user.id]
     end
         
+    # Return the tags attached to a given user.
     self.assignments.each do |assignment|
       assignment.applied_tags.each do |tag|
         puts 'user id ' + assignment.user_id.to_s + ' tag ' + tag.text
@@ -121,4 +130,6 @@ class Day < ActiveRecord::Base
     return count
   end
   
+  # Return an array of emails that should be notified
+  # on a given day.
 end

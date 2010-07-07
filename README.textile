@@ -1,0 +1,11 @@
+h1. Schedgy
+
+h2. Dependencies
+
+*backgrounddrb*
+
+Read the instructions on this page: _http://backgroundrb.rubyforge.org/_
+
+*rspec*
+
+_gem install rspec_
