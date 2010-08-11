@@ -32,7 +32,7 @@ var Schedgy = Class.extend({
 		// user on a given day.
 		this.loadTags();
 	},
-	
+
 	loadRoles: function() {
 		var self = this;
 		var action = '/list_role_type_names'; // The action for the rails controller.
@@ -238,6 +238,12 @@ var Day = Class.extend({
 		this.schedgy = params.schedgy;
 		this.requiredUsers = 5;
 		this.currentUsers = 0;
+		
+		// Highlight the day if it is today.
+		var dateObject = new Date();
+		if (dateObject.getDate() == this.dayOfMonth) {
+			$day.css('background-color', 'rgba(0,255,0,0.3)');
+		}
 		
 		this.dayRequirements = new DayRequirements({
 			schedgy: this.schedgy,

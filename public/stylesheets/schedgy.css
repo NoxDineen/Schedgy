@@ -77,9 +77,9 @@ h3 {
 #schedgy-month {
 	font: bold 50px 'Reenie Beanie', Arial, Helvetica, sans-serif;
 	text-transform: uppercase;
-	text-align: center;
 	letter-spacing: -1px;
 	padding-bottom: 20px;
+	display: inline;
 }
 #schedgy-calendar {
 	width: 99%;

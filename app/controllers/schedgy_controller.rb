@@ -4,7 +4,23 @@ class SchedgyController < ApplicationController
   # Helper functions for Schedgy.
   include ApplicationHelper
 
+  # Displays the schedgy calendar.
   def index
+    
+    if params['date']
+      this_month = Time.parse params['date']
+    else
+      this_month = Time.now;
+    end
+
+    next_month = this_month + 1.month
+    prev_month = this_month - 1.month
+    
+    @prev_month_string = prev_month.strftime('%B %d, %Y')
+    @next_month_string = next_month.strftime('%B %d, %Y')
+    @this_month_string = this_month.strftime('%B %d, %Y')
+    @this_month_short_string = this_month.strftime('%B %Y')
+    
   end
   
   def admin
