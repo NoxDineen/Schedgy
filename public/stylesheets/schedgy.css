@@ -126,6 +126,7 @@ h3 {
 			height: 16px;
 			margin-bottom: 1px;
 		}
+		
 		#schedgy-calendar td ul li img {
 			float: right;
 		}
@@ -198,3 +199,6 @@ a.required-users-link:hover {
 	margin-left: 3px;
 }
 
+#schedgy-calendar td ul .highlight {
+	background-color: yellow;
+}

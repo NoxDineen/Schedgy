@@ -572,6 +572,16 @@ var User = Class.extend({
 		this.$user.draggable({
 	    	helper: 'clone'
 	    });
+	
+		this.$user.click(function() {
+			var data1 = $(this).data('class');
+			$('#schedgy-calendar td ul li').each(function(k, v) {
+				var data2 = $(v).data('class');
+				if (data1.first_name == data2.first_name && data1.last_name == data2.last_name) {
+					$(v).toggleClass('highlight');
+				}
+			});
+		});
 			
 		params.$userList.append(this.$user); // Append the user badge to the #users element.
 	}
