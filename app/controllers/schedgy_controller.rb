@@ -9,6 +9,18 @@ class SchedgyController < ApplicationController
   
   def admin
   end
+  
+  # Sends out the next day's support emails.
+  def send_emails
+    if request.post?
+      tomorrow = Time.now + 1.day
+      day = Day.first(:conditions => ['date = ?', tomorrow.strftime('%Y-%m-%d')])
+
+      day.assigned_users.each do |user|
+        SupportNotifier.deliver_support_notification(user) # sends the email
+      end
+    end
+  end
 
   # Returns a list of all the users within the schedy system.
   # 
