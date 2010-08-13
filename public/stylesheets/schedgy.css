@@ -81,6 +81,11 @@ h3 {
 	padding-bottom: 20px;
 	display: inline;
 }
+.month-nav-prev,
+.month-nav-next {
+	font-size: 20px;
+	padding: 0 15px;
+}
 #schedgy-calendar {
 	width: 99%;
 	margin-left: 12px;
