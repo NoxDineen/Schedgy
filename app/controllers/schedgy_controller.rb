@@ -368,7 +368,7 @@ class SchedgyController < ApplicationController
     # must be the first user being created.
     can_create_user = false
     
-    if User.find(:all).length == 0:
+    if User.find(:all).length == 0
       can_create_user = true # Creating the first user.
     elsif session[:level] == 2
       can_create_user = true # Logged in as admin.
@@ -398,7 +398,7 @@ class SchedgyController < ApplicationController
     @role_type_names = RoleType.all.map(&:name)
     @user_emails = User.all.map(&:email)
      
-    if session[:level] == 2: # Make sure this is an admin user.
+    if session[:level] == 2 # Make sure this is an admin user.
       if params['role_type'] && params['user']
         # Save the role to the user.
         @user = User.first(:conditions => ['email = ?', params['user']['email']])
