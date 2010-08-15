@@ -433,17 +433,17 @@ var Day = Class.extend({
 			
 			// Create user pop-up.
 			var $userMenu = $('<div class="user-menu" />');
-			$userMenu.css({position: 'absolute', top: '-32px', left: '113px'});
-			var $div = $('<div />');
+			$userMenu.css({position: 'absolute', top: '-28px', left: '113px'});
+			var $ul = $('<ul />');
 			
 			// Menu for tagging a user on a given day is built from the
 			// taging options returned by the server.
 			$.each(self.schedgy.tags, function() {
-				$div.append('<div><img src="images/tags/' + this + '.png" class="user-menu-' + this + '" alt="' + this + '" /><a href="#"  class="user-menu-' + this + '">' + this + '</a></div>');
+				$ul.append('<li><img src="images/tags/' + this + '.png" class="user-menu-' + this + '" alt="' + this + '" /><a href="#"  class="user-menu-' + this + '">' + this + '</a></li>');
 			});
 			
-			$div.append('<img src="images/icons/cross.png" class="user-menu-remove" alt="Remove" /><a href="#" class="user-menu-remove">Remove</a>');
-			$userMenu.append($div);
+			$ul.append('<li><img src="images/icons/cross.png" class="user-menu-remove" alt="Remove" /><a href="#" class="user-menu-remove">Remove</a></li>');
+			$userMenu.append($ul);
 			$user.append($userMenu);
 			
 			// Add the remove event.

@@ -107,7 +107,7 @@ h3 {
 		width: 14%;
 		height: 100px;
 	}
-	#schedgy-calendar td.day ul li {
+	#schedgy-calendar td.day > ul > li {
 		position: relative;
 	}
 	#schedgy-calendar td.today {
@@ -120,11 +120,11 @@ h3 {
 		#schedgy-calendar td .event {
 		   float: right;
 		}
-		#schedgy-calendar td ul {
+		#schedgy-calendar td > ul {
 			margin: 3px;
 			height: 130px;
 		}
-		#schedgy-calendar td ul li {
+		#schedgy-calendar td > ul > li {
 			background-color: #ddd;
 			border-radius: 8px;
 			-webkit-border-radius: 8px;
@@ -134,8 +134,11 @@ h3 {
 			height: 16px;
 			margin-bottom: 1px;
 		}
+		#schedgy-calendar td > ul > li:hover {
+			background-color: #d5d5d5;
+		}
 		
-		#schedgy-calendar td ul li img {
+		#schedgy-calendar td > ul > li img {
 			float: right;
 		}
 		
@@ -160,13 +163,18 @@ form input {
 }
 
 .user-menu {
-	background: url('../images/menu-bg.png') no-repeat 0 center;
-	padding: 10px 10px 10px 15px;
 	width: 100px;
 	z-index: 1;
+	-webkit-box-shadow: 2px 2px 3px rgba(30, 30, 30, 0.4);
 }
-.user-menu div {
-	padding: 1px 0;
+.user-menu ul {
+	background: url('../images/menu-bg.png') no-repeat 0 center;
+	padding: 10px 10px 10px 15px;
+	height: auto;
+	margin-left: -5px;
+}
+.user-menu li {
+	margin: 0;
 }
 .user-menu a:link, .user-menu a:visited, .user-menu a:active {
 	color: #7f6c00;
