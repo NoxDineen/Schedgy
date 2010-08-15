@@ -241,8 +241,11 @@ var Day = Class.extend({
 		
 		// Highlight the day if it is today.
 		var dateObject = new Date();
-		if (dateObject.getDate() == this.dayOfMonth) {
-			$day.css('background-color', 'rgba(0,255,0,0.3)');
+		if (
+			dateObject.getDate() == this.dayOfMonth && 
+			dateObject.getMonth() == this.calendar.dateObject.getMonth()
+		) {
+			$day.addClass('today');
 		}
 		
 		this.dayRequirements = new DayRequirements({

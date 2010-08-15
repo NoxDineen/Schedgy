@@ -3,6 +3,7 @@
  * MIT Licensed 2010
  * Programmed By: Benjamin E. Coe
  */
+/* @override http://127.0.0.1:3000/stylesheets/schedgy.css */
 
 body {
 	background-color: #f4f4f4;
@@ -108,8 +109,10 @@ h3 {
 	}
 	#schedgy-calendar td.day ul li {
 		position: relative;
-	}	
-	
+	}
+	#schedgy-calendar td.today {
+		background-color: rgba(0, 255, 0, 0.3);
+	}
 		#schedgy-calendar td .number {
 			background-color: #f2f2f2;
 			padding: 3px;
@@ -205,5 +208,5 @@ a.required-users-link:hover {
 }
 
 #schedgy-calendar td ul .highlight {
-	background-color: yellow;
+	background-color: orange;
 }
