@@ -8,8 +8,7 @@ class SchedgyController < ApplicationController
 
   # Displays the schedgy calendar.
   def index
-    layout nil
-    
+        
     if params['date']
       this_month = Time.parse params['date']
     else
@@ -23,7 +22,8 @@ class SchedgyController < ApplicationController
     @next_month_string = next_month.strftime('%B %d, %Y')
     @this_month_string = this_month.strftime('%B %d, %Y')
     @this_month_short_string = this_month.strftime('%B %Y')
-    
+  
+    render :render => 'index'
   end
   
   def admin
