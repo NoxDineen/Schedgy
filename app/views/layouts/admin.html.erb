@@ -12,6 +12,13 @@
 		</nav>
 	</header>
 	<div id="main">
+		<% if flash[:error] %>
+			<div class="error-message"><%= flash[:error]%></div>
+		<% end %>
+
+		<% if flash[:message] %>
+			<div class="message"><%= flash[:message]%></div>
+		<% end %>
 	<%= yield %>
 	</div>
 </body>

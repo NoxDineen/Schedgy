@@ -1,8 +1,10 @@
 <ul class="menu">
 	<li><%= link_to "Login", :controller => "schedgy", :action => "login" %></li>
+	<% if session[:level] == 2 %>
 	<li><%= link_to "Create Tag", :controller => "schedgy", :action => "create_tag" %></li>
 	<li><%= link_to "Create User Role", :controller => "schedgy", :action => "create_role_type" %></li>
 	<li><%= link_to "Create User", :controller => "schedgy", :action => "create_user" %></li>
 	<li><%= link_to "Assign User to Role", :controller => "schedgy", :action => "assign_user_to_role" %></li>
 	<li><%= link_to "Change Password", :controller => "schedgy", :action => "change_password" %></li>
+	<% end %>
 </ul>

@@ -1,5 +1,3 @@
-<%= link_to "Admin Options", :controller => "schedgy", :action => "admin" %>
-
 <div id="schedgy-form">
 	
 <h2>Assign a User to a Role Type</h2>
@@ -10,8 +8,12 @@
 
 <% form_for :role_type, :url => { :action => "assign_user_to_role" } do |f| %>
 	<%= f.error_messages %>
-	<%= label(:user, :email) %><%= select("user", "email", @user_emails, {:include_blank => true}) %>
-  	<%= label(:role_type, :name) %><%= select("role_type", "name", @role_type_names, {:include_blank => true}) %>
+	<div class="input">
+		<%= label(:user, :email) %><%= select("user", "email", @user_emails, {:include_blank => true}) %>
+	</div>
+  	<div class="input">
+		<%= label(:role_type, :name) %><%= select("role_type", "name", @role_type_names, {:include_blank => true}) %>
+	</div>
 	<%= submit_tag 'Assign' %>
 <% end %>
 

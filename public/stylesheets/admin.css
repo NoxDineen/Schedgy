@@ -37,3 +37,15 @@ header nav li a {
 #main form label {
 	display: block;
 }
+div.error-message {
+	background: #ffe6c9;
+	color: #7f0000;
+	padding: 10px;
+	font-size: 14px;
+}
+div.message {
+	background: #c9ffdb;
+	color: #009431;
+	padding: 10px;
+	font-size: 14px;
+}

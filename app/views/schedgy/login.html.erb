@@ -2,14 +2,6 @@
 	
 <h2>Login</h2>
 
-<% if flash[:error] %>
-	<strong><%= flash[:error]%></strong>
-<% end %>
-
-<% if flash[:message] %>
-	<strong><%= flash[:message]%></strong>
-<% end %>
-
 <% form_for :user,  :url => { :action => "login" } do |f| %>
 	<%= f.error_messages %><br />
 	<div class="input"><%= label(:user, :email) %><%= f.text_field :email %></div>

@@ -10,7 +10,7 @@
 
 <% form_for :role_type,  :url => { :action => "create_role_type" } do |f| %>
 	<%= f.error_messages %>
-	<%= label(:role_type, :name) %><%= f.text_field :name %>
+	<div class="input"><%= label(:role_type, :name) %><%= f.text_field :name %></div>
 	<%= submit_tag 'Create' %>
 <% end %>
 
