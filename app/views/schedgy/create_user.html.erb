@@ -1,5 +1,3 @@
-<%= link_to "Admin Options", :controller => "schedgy", :action => "admin" %>
-
 <div id="schedgy-form">
 	
 <h2>Create a Schedgy User</h2>
@@ -9,12 +7,12 @@
 <% end %>
 
 <% form_for :user,  :url => { :action => "create_user" } do |f| %>
-	<%= f.error_messages %><br />
-	<%= label(:user, :first_name) %><%= f.text_field :first_name %><br />
-	<%= label(:user, :last_name) %><%= f.text_field :last_name %><br />
-	<%= label(:user, :email) %><%= f.text_field :email %><br />
-	<%= label(:user, :password) %><%= f.password_field :password %><br />
-	<%= label(:user, :level) %><%= select("user", "level", @user_levels, {:include_blank => false}) %><br />
+	<%= f.error_messages %>
+	<div class="input"><%= label(:user, :first_name) %><%= f.text_field :first_name %></div>
+	<div class="input"><%= label(:user, :last_name) %><%= f.text_field :last_name %></div>
+	<div class="input"><%= label(:user, :email) %><%= f.text_field :email %></div>
+	<div class="input"><%= label(:user, :password) %><%= f.password_field :password %></div>
+	<div class="input"><%= label(:user, :level) %><%= select("user", "level", @user_levels, {:include_blank => false}) %></div>
 	<%= submit_tag 'Create' %>
 <% end %>
 

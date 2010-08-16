@@ -12,8 +12,8 @@
 
 <% form_for :user,  :url => { :action => "login" } do |f| %>
 	<%= f.error_messages %><br />
-	<%= label(:user, :email) %><%= f.text_field :email %><br />
-	<%= label(:user, :password) %><%= f.password_field :password %><br />
+	<div class="input"><%= label(:user, :email) %><%= f.text_field :email %></div>
+	<div class="input"><%= label(:user, :password) %><%= f.password_field :password %></div>
 	<%= submit_tag 'Login' %>
 <% end %>
 

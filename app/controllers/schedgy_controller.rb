@@ -4,8 +4,11 @@ class SchedgyController < ApplicationController
   # Helper functions for Schedgy.
   include ApplicationHelper
 
+  layout 'admin'
+
   # Displays the schedgy calendar.
   def index
+    layout nil
     
     if params['date']
       this_month = Time.parse params['date']
@@ -312,6 +315,7 @@ class SchedgyController < ApplicationController
         flash[:message] = "User #{params['user']['email']} logged in."
         session[:level] = user.level
         session[:email] = user.email
+        redirect_to :controller => 'schedgy', :action => 'admin'
       else
         flash[:error] = 'Username or password incorrect.'
       end
