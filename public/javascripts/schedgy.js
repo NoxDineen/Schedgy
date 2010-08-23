@@ -4,6 +4,12 @@
  * Programming and Design By: Benjamin E. Coe and Jeff Sarmiento
  */
 
+// Add a new :icontains() selector to jQuery for doing case insensitive searchs.
+// Partly taken from the comments on :contains() selector.
+jQuery.expr[":"].icontains = function(obj, index, meta, stack) {
+	return (obj.textContent || obj.innerText || $(obj).text() || "").toLowerCase().indexOf(meta[3].toLowerCase()) > -1;
+}
+
 /**
  * The main Schedgy object. controls calendars, users, and events.
  *
@@ -933,7 +939,7 @@ var ListFilter = Class.extend({
 	filterList: function (search) {
 		var elements = this.list.children();
 		elements.each(function () {
-			if ($(':contains("' + search.replace('"', '\"') + '")', this).length) {
+			if ($(':icontains("' + search.replace('"', '\"') + '")', this).length) {
 				$(this).show();
 			} else {
 				$(this).hide();
