@@ -31,6 +31,7 @@ var Schedgy = Class.extend({
 		// Load the tags that can be applied to a given
 		// user on a given day.
 		this.loadTags();
+		this.createUserFilter();
 	},
 
 	loadRoles: function() {
@@ -98,6 +99,13 @@ var Schedgy = Class.extend({
 	
 	getUser: function(email) {
 		return this.users[email];
+	},
+	
+	createUserFilter: function () {
+		this.userFilter = new ListFilter({
+			input: '#user-search',
+			list: '#users'
+		});
 	}
 });
 
@@ -899,5 +907,37 @@ var DayRequirements = Class.extend({
 		}
 		
 		return $userWidget;
+	}
+});
+
+var ListFilter = Class.extend({
+	defaults: {},
+	options: {},
+
+	init: function (options) {
+		this.options = jQuery.extend({}, this.defaults, options);
+		this.input = $(this.options.input);
+		this.list = $(this.options.list);
+
+		this.bindEvents();
+	},
+	
+	bindEvents: function () {
+		var self = this;
+		this.input.bind('keyup', function (event) {
+			self.filterList(this.value);
+		});
+	},
+	
+	// Filter the list in this.list to only contain nodes with the search string in them.
+	filterList: function (search) {
+		var elements = this.list.children();
+		elements.each(function () {
+			if ($(':contains("' + search.replace('"', '\"') + '")', this).length) {
+				$(this).show();
+			} else {
+				$(this).hide();
+			}
+		});
 	}
 });
