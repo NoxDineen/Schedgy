@@ -210,6 +210,10 @@ form input {
             margin-right: 5px;
         }
 
+#user-search {
+	width: 150px;
+}
+
 a.required-users-link:link, a.required-users-link:visited, a.required-users-link:active {
 	padding: 3px;
 }

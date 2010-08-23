@@ -930,7 +930,7 @@ var ListFilter = Class.extend({
 	
 	bindEvents: function () {
 		var self = this;
-		this.input.bind('keyup', function (event) {
+		this.input.bind('keyup change', function (event) {
 			self.filterList(this.value);
 		});
 	},
