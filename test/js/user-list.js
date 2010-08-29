@@ -14,6 +14,14 @@ test("add-tag-to-user", function() {
     equals($('#foobar').text(), "Hello World!", "File 2: Created element with jQuery added it to DOM and pulled it out.");
 });
 
+test("showing-a-test", function() {
+    function foo() {
+        return 'foo return';
+    }
+    
+    equals('foo return', foo(), "Function should return string.")
+})
+
 // Testing whether click events are working
 // proplerly in Who Unit?
 test("much-with-dom", function() {
