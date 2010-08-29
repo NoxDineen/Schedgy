@@ -19,7 +19,7 @@ test("showing-a-test", function() {
         return 'foo return';
     }
     
-    equals('foo return', foo(), "Function should return string.")
+    equals('foo returnmc', foo(), "Function should return string.")
 })
 
 // Testing whether click events are working
