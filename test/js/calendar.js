@@ -1,7 +1,7 @@
 module('calendar');
 
 test("test-drop-on-day", function() {
-    equals(0, 0, "Make sure this is working.");
+    equals(0, 1, "Make sure this is working.");
     //equals(jQuery('#content').html(), "Some Content", "Assert that we get the content of a div with an ID.");
 });
 
