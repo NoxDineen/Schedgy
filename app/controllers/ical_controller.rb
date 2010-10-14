@@ -16,7 +16,13 @@ class IcalController < ApplicationController
       else
         users = User.find(:all)
       end
-    
+      
+      if params['alarms']
+        alarms = 'true' == params['alarms'].downcase
+      else
+        alarms = true
+      end
+      
       start_month = this_month - 1.month
       end_month = this_month + 3.months
 
@@ -31,9 +37,11 @@ class IcalController < ApplicationController
             summary "#{user.first_name} #{user.last_name} is on support"
             add_attendee user.email
             
-            alarm do
-              summary "#{user.first_name} #{user.last_name} is on support"
-              trigger "-PT15H"
+            if alarms
+              alarm do
+                summary "#{user.first_name} #{user.last_name} is on support"
+                trigger "-PT15H"
+              end
             end
           end
         end
