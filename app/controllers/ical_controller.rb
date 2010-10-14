@@ -10,17 +10,20 @@ class IcalController < ApplicationController
       else
         this_month = Time.now;
       end
-    
-      if params['email']
-        users = User.find(:all, :conditions => {:email => params['email']})
-      else
-        users = User.find(:all)
-      end
       
       if params['alarms']
         alarms = 'true' == params['alarms'].downcase
       else
         alarms = true
+      end
+      
+      if params['email']
+        users = User.find(:all, :conditions => {:email => params['email']})
+      else
+        users = User.find(:all)
+        if params['alarms'].nil?
+          alarms = false
+        end
       end
       
       start_month = this_month - 1.month
